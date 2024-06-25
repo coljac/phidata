@@ -90,6 +90,9 @@ class Claude(LLM):
         api_kwargs: Dict[str, Any] = self.api_kwargs
         api_messages: List[dict] = []
 
+        roles = [m.role for m in messages if m.role != "system"]
+        if roles[0] != "user":
+            messages.insert(0, Message(role="user", content="You are a helpful and professional assistant."))
         for m in messages:
             if m.role == "system":
                 api_kwargs["system"] = m.content
